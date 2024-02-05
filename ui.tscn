@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqihgpsnjglv8"]
+
+[ext_resource type="Script" path="res://ui.gd" id="1_lr7we"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_lr7we")
+
+[node name="CheckBox" type="CheckBox" parent="."]
+offset_right = 24.0
+offset_bottom = 24.0
+
+[connection signal="toggled" from="CheckBox" to="." method="_on_check_box_toggled"]

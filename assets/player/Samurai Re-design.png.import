@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://obuk43r3kwkm"
-path="res://.godot/imported/test.webp-e71f2d6aef13bff6d86686a6ff234348.ctex"
+uid="uid://cd65mkehdr5aj"
+path="res://.godot/imported/Samurai Re-design.png-50621a2dc9d4785b9b57d32849e4ad1f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://test.webp"
-dest_files=["res://.godot/imported/test.webp-e71f2d6aef13bff6d86686a6ff234348.ctex"]
+source_file="res://assets/player/Samurai Re-design.png"
+dest_files=["res://.godot/imported/Samurai Re-design.png-50621a2dc9d4785b9b57d32849e4ad1f.ctex"]
 
 [params]
 
