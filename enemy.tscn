@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5n1hjtvbclxm"]
+
+[ext_resource type="Script" path="res://enemy.gd" id="1_rshv3"]
+[ext_resource type="Texture2D" uid="uid://cd65mkehdr5aj" path="res://assets/player/Samurai Re-design.png" id="2_ppeue"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wyj26"]
+size = Vector2(10, 18)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6kyib"]
+
+[node name="Enemy" type="CharacterBody2D"]
+script = ExtResource("1_rshv3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(6, 10)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("2_ppeue")
+hframes = 10
+vframes = 10
+metadata/_aseprite_wizard_config_ = {
+"i_mode": -1,
+"keep_anim_length": false,
+"layer": "",
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"op_exp": false,
+"player": "AnimationPlayer",
+"source": ""
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wyj26")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(4.12, 4.12)
+shape = SubResource("CircleShape2D_6kyib")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
