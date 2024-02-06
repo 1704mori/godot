@@ -1,12 +1,13 @@
 [gd_scene load_steps=5 format=3 uid="uid://c5n1hjtvbclxm"]
 
-[ext_resource type="Script" path="res://enemy.gd" id="1_rshv3"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_rshv3"]
 [ext_resource type="Texture2D" uid="uid://cd65mkehdr5aj" path="res://assets/player/Samurai Re-design.png" id="2_ppeue"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wyj26"]
-size = Vector2(10, 18)
+size = Vector2(10, 19)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6kyib"]
+radius = 48.28
 
 [node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_rshv3")
@@ -32,12 +33,12 @@ metadata/_aseprite_wizard_config_ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_wyj26")
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-scale = Vector2(4.12, 4.12)
 shape = SubResource("CircleShape2D_6kyib")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

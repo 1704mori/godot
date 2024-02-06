@@ -1,13 +1,13 @@
 extends CharacterBody2D
 
 # Constants for movement
-const SPEED = 200.0
+var SPEED = 200.0
 const JUMP_VELOCITY = -350.0
 const FRICTION = 6.0
 const DASH_SPEED = 800.0
 const DASH_COOLDOWN = 1.0
 const WALL_JUMP_TIME = 0.2
-const MAX_JUMPS = 1
+const MAX_JUMPS = 2
 const COYOTE_TIME = 0.6  # Coyote time duration in seconds
 
 # Exported variables for tweaking in the editor
@@ -42,13 +42,11 @@ func _physics_process(delta):
 	input_vector = input_vector.normalized()
 
 	# Flip sprite based on movement direction
-	if input_vector.x < 0:
-		sprite.flip_h = true
-		$CollisionShape2D.position.x = sprite.scale.x / 2 + 48
-	elif input_vector.x > 0:
-		sprite.flip_h = false
-		$CollisionShape2D.position.x = sprite.scale.x / 2 - 48
-		
+	if Input.is_action_just_pressed("ui_left"):
+		sprite.scale.x = abs(sprite.scale.x) * -1
+	if Input.is_action_just_pressed("ui_right"):
+		sprite.scale.x = abs(sprite.scale.x)
+	
 	if is_dashing:
 		velocity.x = input_vector.x * DASH_SPEED
 		dash_cooldown_timer = 0
@@ -81,24 +79,38 @@ func _physics_process(delta):
 	move_and_slide()
 	just_landed = is_on_floor() and was_in_air
 	handle_animation()
-
+	
 func handle_movement_and_jumping(delta):
-	if not is_on_floor() and not Input.is_action_just_pressed("ui_up"):
-		velocity.y += gravity * gravity_multiplier * delta
-		wall_jump_timer = 0
-		animation_player.play("Fall")
-
-	if (is_on_floor() or coyote_time_timer > 0) and Input.is_action_just_pressed("ui_up"):
-		if not is_on_floor():
-			coyote_time_timer = 0  # Reset coyote time if used for jumping
-			velocity.y = 0  # Reset or reduce vertical velocity before jumping
-		velocity.y = JUMP_VELOCITY * (1.0 + (COYOTE_TIME - coyote_time_timer) * 0.2)  # Slightly increase jump velocity based on remaining coyote time
+	if is_on_floor() and jumps >= MAX_JUMPS:
 		jumps = 0
-		animation_player.play("Jump")
-	elif not is_on_floor() and Input.is_action_just_pressed("ui_up") and jumps < MAX_JUMPS:
-		velocity.y = JUMP_VELOCITY * double_jump_multiplier
-		jumps += 1
-		animation_player.play("Jump")
+	
+	if is_on_floor() or coyote_time_timer > 0:
+		if Input.is_action_just_pressed("ui_up"):
+			# Reset jumps when a jump is initiated from the ground or during Coyote Time
+			jumps = 1
+			perform_jump()
+		elif abs(input_vector.x) > 0:
+			animation_player.play("Run")
+		else:
+			animation_player.play("Idle")
+	else:
+		if Input.is_action_just_pressed("ui_up") and jumps < MAX_JUMPS:
+			jumps += 1
+			perform_jump()
+
+	if not is_on_floor():
+		velocity.y += gravity * gravity_multiplier * delta
+		if wall_jump_timer <= 0:
+			animation_player.play("Fall")
+
+func perform_jump():
+	# Centralize jump velocity calculation
+	velocity.y = JUMP_VELOCITY
+	if jumps > 1:  # Apply multiplier for double jump
+		velocity.y *= double_jump_multiplier
+	animation_player.play("Jump")
+	# Reset or manage Coyote Time after a jump is made
+	coyote_time_timer = 0
 
 func handle_animation():
 	if just_landed and not is_landing:
@@ -115,4 +127,6 @@ func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "Land":
 		is_landing = false
 
-# Remember to connect the _on_animation_player_animation_finished signal to this method in the Godot editor
+
+func _on_canvas_layer_toggle_draw_collision(enabled):
+	$CollisionShape2D.toggle_enabled_state()

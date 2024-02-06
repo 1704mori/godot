@@ -24,12 +24,8 @@ func _draw()->void:
 	elif shape is RectangleShape2D:
 		var size:Vector2 = shape.size
 		var rect: = Rect2(-size.x * 0.5, -size.y * 0.5, size.x, size.y) 
-		draw_rect(rect, color)
+		draw_rect(rect, color, false)
 	elif shape is SeparationRayShape2D:
 		#draw_line(Vector2.ZERO, Vector2.DOWN * shape.length, color, width)
 		var rect: = Rect2(-width * 0.5, 0, width, shape.length)
 		draw_rect(rect, color)
-
-
-func _on_canvas_layer_toggle_draw_collision(enabled):
-	toggle_enabled_state()
