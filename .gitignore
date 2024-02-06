@@ -14,7 +14,8 @@ export_presets.cfg
 data_*/
 mono_crash.*.json
 
-output/
-!output/.gitkeep
-
 *.tmp
+
+# ignore everything in the output directory but not the directory itself
+!output/.gitkeep
+output/*
